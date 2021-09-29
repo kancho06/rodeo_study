@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>익명 비밀게시판</title>
+    <!--    벌마 css링크-->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.1/css/bulma.min.css">
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+    <!--    UIkit css링크-->
+    <link rel="stylesheet" href="uikit/uikit.min.css" />
+    <script src="uikitjs/uikit.min.js"></script>
+    <script src="uikitjs/uikit-icons.min.js"></script>
+
+    <!--    css,js링크-->
+    <link rel="stylesheet" href="css1/post.css">
+    <script src="post.js"></script>
+</head>
+<body>
+<div class="wrap">
+    <nav class="navbar is-fixed-top is-black" role="navigation" aria-label="main navigation">
+        <div class="navbar-brand">
+            <a class="navbar-item" href="index.html">
+                <strong class="is-sparta"
+                        style="font-family: 'Stylish', sans-serif;font-size: larger;">OUR OWN SECRET</strong>
+            </a>
+        </div>
+    </nav>
+    <div id="header" class="header">
+        <div id="header-inner" class="header-inner">
+            <div class="text">
+                <h1>OUR OWN SECRET</h1>
+                <h3>익명으로 비밀 나누기</h3>>
+            </div>
+            <img src="./images/OUR%20OWN%20SECRET%20배경만.png" alt="" id="head_img"/>
+        </div>
+    </div>
+</div>
+<div class="area-write">
+    <div class="posting">
+    <div class="field">
+        <label class="label">제목</label>
+        <div class="control">
+            <input class="input" type="text" placeholder="제목을 입력해 주세요" id="title">
+        </div>
+    </div>
+    <div class="field">
+        <label class="label">닉네임</label>
+        <div class="control">
+            <input class="input" type="text" placeholder="사람들에게 불릴 닉네임" id="username">
+        </div>
+    </div>
+    <div class="field">
+        <label class="label">비밀 주제</label>
+        <div class="control">
+            <div class="select">
+                <select id="category">
+                    <option></option>
+                    <option>관계</option>
+                    <option>범죄</option>
+                    <option>일상</option>
+                    <option>기타</option>
+                </select>
+            </div>
+        </div>
+    </div>
+    <div class="field">
+        <label class="label">내용</label>
+        <div class="control">
+            <textarea class="textarea" placeholder="내용을 입력해 주세요~"id="contents" cols="30"></textarea>
+        </div>
+    </div>
+        <span class="uk-icon-link" uk-icon="icon: pencil; ratio: 2" onclick="writePost()" id="write-icon"></span>
+        <a href="index.html" class="uk-icon-link uk-margin-small-right" uk-icon="icon: close; ratio: 2"></a>
+
+    </div>
+
+</div>
+</body>
+</html>

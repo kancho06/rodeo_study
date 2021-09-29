@@ -1,0 +1,85 @@
+
+body {
+    margin: 0px;
+}
+
+.wrap {
+
+    margin: 10px auto;
+
+}
+.header-inner{
+    position:relative;
+
+
+}
+#head_img {
+    width:100vw;
+    height:400px;
+}
+
+/*img {*/
+/*    width:100vw;*/
+/*    height: 400px;*/
+/*}*/
+
+h1 {
+    color: lightgray;
+    font-size: xxx-large;
+    position:absolute;
+    top:275px;
+    left:80px;
+    letter-spacing:13px;
+}
+
+h3 {
+    color: lightslategray;
+    position:absolute;
+    font-size: medium;
+    top:259px;
+    left:400px;
+    letter-spacing:8px;
+}
+
+.is-sparta {
+    color: #065e3f !important;
+}
+
+.section {
+    padding: 1rem 1.5rem;
+    max-width: 750px;
+    margin: auto;
+}
+
+/*-----------------------------------------------------------*/
+.uk-article {
+    width:40vw;
+    margin: auto;
+    padding:20px;
+    background-color: #f8f8f8;
+    border:3px solid #254740;
+    border-radius: 10px;
+
+}
+.uk-icon-button{
+    cursor: pointer;
+    display: none;
+
+
+}
+
+
+.edit {
+    cursor: pointer;
+    display: none;
+}
+
+.edit textarea.te-edit {
+    border-right: none;
+    border-top: none;
+    border-left: none;
+    resize: none;
+    border-bottom: 1px solid #212529;
+    width: 100%;
+
+}
