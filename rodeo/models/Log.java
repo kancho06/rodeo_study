@@ -1,9 +1,9 @@
 package com.sparta.rodeo.models;
 
 
+import com.sparta.rodeo.dto.LogRequestDto;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
 

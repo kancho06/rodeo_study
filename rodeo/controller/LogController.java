@@ -1,24 +1,34 @@
 package com.sparta.rodeo.controller;
 
 import com.sparta.rodeo.models.Log;
-import com.sparta.rodeo.models.LogRepository;
-import com.sparta.rodeo.models.LogRequestDto;
+
+import com.sparta.rodeo.dto.LogRequestDto;
+
+import com.sparta.rodeo.security.UserDetailsImpl;
 import com.sparta.rodeo.service.LogService;
-import lombok.RequiredArgsConstructor;
 
 
+
+import org.springframework.beans.factory.annotation.Autowired;
+
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDateTime;
+
 import java.util.List;
 
 
 @RestController
-@RequiredArgsConstructor
+
 public class LogController {
-    private final LogRepository logRepository;
+
     private final LogService logService;
+
+    @Autowired
+    public LogController (LogService logService) {
+        this.logService =logService;
+    }
 
 
     //포스트생성 xss처리
@@ -30,14 +40,13 @@ public class LogController {
     //메인페이지 전체글리스트
     @GetMapping("/api/logs")
     public List<Log> getLog(){
-        LocalDateTime now = LocalDateTime.now();
-        LocalDateTime yesterday = LocalDateTime.now().minusDays(1);
-        return logRepository.findAllByModifiedAtBetweenOrderByModifiedAtDesc(yesterday, now);
+        return logService.getLogs();
     }
+
     //상세페이지 삭제
     @DeleteMapping("/api/logs/{id}")
     public Long deleteLog(@PathVariable Long id) {
-        logRepository.deleteById(id);
+        logService.deleteById(id);
         return id;
     }
     //상세페이지 수정
@@ -48,12 +57,13 @@ public class LogController {
     }
     //상세페이지 조회
     @GetMapping("/api/logs/{id}")
-    public Log getOneLog(@PathVariable Long id) {
-        Log log = logRepository.findById(id).orElseThrow(
-                () -> new NullPointerException("게시물을 찾을 수 없습니다.")
-        );
+    public Log getOneLog(@PathVariable Long id ) {
+
+        Log log = logService.findById(id);
+
         return log;
     }
+
 
 
 }

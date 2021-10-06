@@ -1,20 +1,26 @@
 package com.sparta.rodeo.service;
 
 import com.sparta.rodeo.models.Log;
-import com.sparta.rodeo.models.LogRepository;
-import com.sparta.rodeo.models.LogRequestDto;
-import lombok.RequiredArgsConstructor;
+import com.sparta.rodeo.repository.LogRepository;
+import com.sparta.rodeo.dto.LogRequestDto;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.PathVariable;
 
 import javax.transaction.Transactional;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
-@RequiredArgsConstructor
+
 public class LogService {
 
     private final LogRepository logRepository;
+
+    @Autowired
+    public LogService(LogRepository logRepository) {
+        this.logRepository = logRepository;
+    }
 
     @Transactional
     public Long update(Long id, LogRequestDto requestDto){
@@ -55,6 +61,23 @@ public class LogService {
         Log log = new Log(requestDto);
         logRepository.save(log);
         return log;
+    }
+
+    public List<Log> getLogs() {
+        LocalDateTime now = LocalDateTime.now();
+        LocalDateTime yesterday = LocalDateTime.now().minusDays(1);
+        return logRepository.findAllByModifiedAtBetweenOrderByModifiedAtDesc(yesterday, now);
+    }
+    public void deleteById(Long id) {
+        logRepository.deleteById(id);
+    }
+
+    public Log findById(Long id) {
+        Log log =logRepository.findById(id).orElseThrow(
+                () -> new NullPointerException("게시물을 찾을 수 없습니다.")
+        );
+        return log;
+
     }
 
 
