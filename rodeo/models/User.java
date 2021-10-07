@@ -42,6 +42,7 @@ public class User {
         this.password = password;
         this.role = role;
         this.kakaoId = null;
+        this.email = null;
     }
 
     //카카오 유저 테이블

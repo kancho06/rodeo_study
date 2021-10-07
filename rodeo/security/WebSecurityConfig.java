@@ -2,7 +2,7 @@ package com.sparta.rodeo.security;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.authentication.AuthenticationManager;
+
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
@@ -12,7 +12,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 @Configuration
 @EnableWebSecurity // 스프링 Security 지원을 가능하게 함
-//@EnableGlobalMethodSecurity(securedEnabled = true) // @Secured 어노테이션 활성화
+@EnableGlobalMethodSecurity(securedEnabled = true) // @Secured 어노테이션 활성화
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Bean
@@ -33,7 +33,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         //disable 은 POST 권한 제한 푸는것
         http.csrf().disable();
         //.ignoringAntMatchers("/user/**"); 이건 권한 각자 설정해 주는것
-        http.headers().frameOptions().disable();
+
+        //나중에확인
+//        http.headers().frameOptions().disable();
 
         http.authorizeRequests()
 
@@ -49,8 +51,11 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 // 회원 관리 처리 API 전부를 login 없이 허용
                 .antMatchers("/api/**").permitAll()
                 .antMatchers("/").permitAll()
-                .antMatchers("/detail.html/**").permitAll()
+                .antMatchers("/detail.html**").permitAll()
                 .antMatchers("/goPost").permitAll()
+
+                //어나니머스 설정 후 로그인시 출입하면 제한페이지 뜨게함
+                .antMatchers("/user/kakao/callback").anonymous()
                 .antMatchers("/user/signup").anonymous()
                 .antMatchers("/user/login").anonymous()
 // 그 외 어떤 요청이든 '인증'
@@ -79,10 +84,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 // "접근 불가" 페이지 URL 설정
                 .accessDeniedPage("/forbidden.html");
     }
-    @Bean
-    @Override
-    public AuthenticationManager authenticationManagerBean() throws Exception {
-        return super.authenticationManagerBean();
-    }
+
 
 }

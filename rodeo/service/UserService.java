@@ -16,7 +16,7 @@ import java.util.regex.Pattern;
 public class UserService {
     private final PasswordEncoder passwordEncoder;
     private final UserRepository userRepository;
-    private static final String ADMIN_TOKEN = "AAABnv/xRVklrnYxKZ0aHgTBcXukeZygoC";
+
 
     @Autowired
     public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder) {
@@ -28,6 +28,7 @@ public class UserService {
 
     public String registerUser(SignupRequestDto requestDto) {
         String error = "";
+
         String username = requestDto.getUsername();
         String password = requestDto.getPassword();
         String passwordCheck = requestDto.getPasswordCheck();
@@ -48,7 +49,7 @@ public class UserService {
         } else if (password.length() < 4) {
             return "비밀번호를 4자 이상 입력하세요";
         } else if (password.contains(username)) {
-            return "비밀번호에 닉네임을 포함할 수 없습니다.";
+            return "비밀번호에 아이디를 포함할 수 없습니다.";
         }
 
         // 패스워드 인코딩

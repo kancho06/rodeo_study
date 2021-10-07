@@ -30,11 +30,11 @@ public class Log extends Timestamped {
     @Column(nullable = false)
     private String category;
 
-    //포스트용 빵틀
-    public Log (LogRequestDto requestDto) {
+    //포스트용 빵틀, 로그인한 username 적용
+    public Log (LogRequestDto requestDto, String username) {
 //        this.image = requestDto.getImage();
         this.title = requestDto.getTitle();
-        this.username = requestDto.getUsername();
+        this.username = username;
         this.contents = requestDto.getContents();
         this.category = requestDto.getCategory();
     }

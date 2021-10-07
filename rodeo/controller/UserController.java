@@ -33,10 +33,8 @@ public class UserController {
     // 회원 로그인 페이지 (유저정보 내려가는것 확인)
     @GetMapping("/user/login")
     public String login(Model model, @AuthenticationPrincipal UserDetailsImpl userDetails) {
-        if (userDetails != null) {
-            model.addAttribute("username", userDetails.getUsername());
 
-        }
+
 
         return "../static/login.html";
     }
@@ -44,20 +42,14 @@ public class UserController {
     // 회원 가입 페이지 (유저정보 내려가는것 확인)
     @GetMapping("/user/signup")
     public String signup(Model model, @AuthenticationPrincipal UserDetailsImpl userDetails) {
-        if (userDetails != null) {
-            model.addAttribute("username", userDetails.getUsername());
 
-        }
+
 
 
         return "../static/signup.html";
     }
 
-//    @GetMapping("/user/login/error")
-//    public String loginError(Model model) {
-//        model.addAttribute("loginError", true);
-//        return "../static/login.html";
-//    }
+
 
     // 회원 가입 요청 처리
     @PostMapping("/user/signup")
@@ -121,6 +113,6 @@ public class UserController {
    @GetMapping("/user/kakao/callback")
     public String kakaoLogin(@RequestParam String code) throws JsonProcessingException {
         kakaoUserService.kakaoLogin(code);
-        return "redirect:../static/index.html";
+        return "redirect:/";
     }
 }

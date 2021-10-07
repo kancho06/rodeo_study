@@ -40,23 +40,8 @@
         errorDiv.style.display = 'block';
     }
 
-    $(document).ready(function () {
-        userCheck();
-    })
 
-    function userCheck() {
-        $.ajax({
-            type: "GET",
-            url: "/api/userCheck",
-            success: function (response) {
-                let usercheck = response;
-                if (usercheck !== ""){
-                    window.location.replace("/")
-                    alert("이미 로그인되었습니다.")
-                }
-            }
-        });
-    }
+
 
 
 

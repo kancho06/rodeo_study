@@ -33,8 +33,9 @@ public class LogController {
 
     //포스트생성 xss처리
     @PostMapping("/api/logs")
-    public Log createLog(@RequestBody LogRequestDto requestDto) {
-        Log log = logService.createLog(requestDto);
+    public Log createLog(@RequestBody LogRequestDto requestDto, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        String username = userDetails.getUser().getUsername();
+        Log log = logService.createLog(requestDto,username);
         return log;
     }
     //메인페이지 전체글리스트
@@ -45,15 +46,21 @@ public class LogController {
 
     //상세페이지 삭제
     @DeleteMapping("/api/logs/{id}")
-    public Long deleteLog(@PathVariable Long id) {
-        logService.deleteById(id);
-        return id;
+    public boolean deleteLog(@PathVariable Long id, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        if (userDetails != null) {
+            logService.deleteById(id, userDetails);
+            return true;
+        }
+        return false;
     }
     //상세페이지 수정
     @PutMapping("/api/logs/{id}")
-    public Long updateLog(@PathVariable Long id, @RequestBody LogRequestDto requestDto) {
-        logService.update(id, requestDto);
-        return id;
+    public boolean updateLog(@PathVariable Long id, @RequestBody LogRequestDto requestDto, @AuthenticationPrincipal UserDetailsImpl userDetails) {
+        if (userDetails != null) {
+            logService.update(id, requestDto, userDetails);
+            return true;
+        }
+        return false;
     }
     //상세페이지 조회
     @GetMapping("/api/logs/{id}")

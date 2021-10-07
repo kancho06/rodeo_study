@@ -10,20 +10,22 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.1/css/bulma.min.css">
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-<!--       uikit css 링크                      -->
-    <link rel="stylesheet" href="css1/uikit.min.css" />
+    <!--       uikit css 링크                      -->
+    <link rel="stylesheet" href="css1/uikit.min.css"/>
     <script src="uikitjs/uikit.min.js"></script>
     <script src="uikitjs/uikit-icons.min.js"></script>
     <!--    css,js링크-->
-    <link th:href="@{/css1/detail.css}" rel="stylesheet" />
+    <link th:href="@{/css1/detail.css}" rel="stylesheet"/>
 
 
     <script>
         $(document).ready(function () {
             getOneLog();
+            getReply();
 
         });
 
+        //log 수정용
         function isValidContents(contents) {
             if (contents == '') {
                 alert('내용을 입력해주세요');
@@ -96,9 +98,9 @@
         <div>
             <a class="uk-button uk-button-text" href="#">5 Comments</a>
         </div>
-        <a class="uk-icon-link" uk-icon="icon: file-edit; ratio: 2" onclick="editPost('${id}')" id="${id}-edit"></a>
+        <a sec:authorize ="isAuthenticated()" class="uk-icon-link" uk-icon="icon: file-edit; ratio: 2" onclick="editPost('${id}')" id="${id}-edit"></a>
             <span class="uk-icon-button" uk-icon="icon: check; ratio: 2" onclick="submitEdit(${id})" id="${id}-submit"></span>
-            <a class="uk-icon-link" uk-icon="icon: trash; ratio: 2" onclick="deleteOne('${id}')" id="${id}-delete"></a>
+            <a sec:authorize ="isAuthenticated()" class="uk-icon-link" uk-icon="icon: trash; ratio: 2" onclick="deleteOne('${id}')" id="${id}-delete"></a>
                 <a href="/" class="uk-icon-link uk-margin-small-right" uk-icon="icon: close; ratio: 2"></a>
 
     </div>`
@@ -111,8 +113,14 @@
                 type: "DELETE",
                 url: `/api/logs/${id}`,
                 success: function (response) {
-                    alert('메시지 삭제에 성공하였습니다.');
-                    window.location.replace("index.html");
+                    if(response == false) {
+                        alert("로그인 해주세요.")
+                        window.location.replace("/user/login")
+                    } else {
+                        alert('게시글 삭제에 성공하였습니다.');
+                        window.location.replace("/");
+                    }
+
                 }
             })
         }
@@ -136,17 +144,212 @@
                 contentType: "application/json",
                 data: JSON.stringify(data),
                 success: function (response) {
-                    alert('메시지 변경에 성공하였습니다.');
-                    window.location.replace("index.html");
+                    if(response == false) {
+                        alert("로그인 해주세요.")
+                        window.location.replace("/user/login")
+                    } else {
+                        alert('게시글 변경에 성공하였습니다.');
+                        window.location.reload();
+                    }
+                }
+            });
+
+
+
+        }
+
+        //---------------------------유저체크-------------------------------------
+        function userCheck() {
+            $.ajax({
+                type: "GET",
+                url: "/api/userCheck",
+                success: function (response) {
+                    let usercheck = response;
+                    if (usercheck == "") {
+                        alert('로그인 해주세요')
+                        window.location.replace("/user/login")
+                    }
+                }
+            });
+        }
+
+        //-----------------------여기부터 댓글-------------------------------------------
+
+        function editPosts(id) {
+            showEditss(id);
+            let comment = $(`#${id}-comment`).text().trim();
+            $(`#${id}-textareas`).val(comment);
+        }
+
+        function showEditss(id) {
+            $(`#${id}-editareas`).show();
+            $(`#${id}-submits`).show();
+            $(`#${id}-deletes`).show();
+
+            $(`#${id}-comment`).hide();
+            $(`#${id}-edits`).hide();
+        }
+
+        function submitEdits(id) {
+            // 1. 작성 대상 메모의 username과 contents 를 확인합니다.
+            let comment = $(`#${id}-textareas`).val().trim();
+
+            // 2. 작성한 메모가 올바른지 isValidContents 함수를 통해 확인합니다.
+            if (isValidcomment(comment) == false) {
+                return;
+            }
+
+            // 3. 전달할 data JSON으로 만듭니다.
+            let data = {'comment': comment};
+
+            // 4. PUT /api/memos/{id} 에 data를 전달합니다.
+            $.ajax({
+                type: "PUT",
+                url: `/api/replys/${id}`,
+                contentType: "application/json",
+                data: JSON.stringify(data),
+                success: function (response) {
+                    if(response == false) {
+                        alert("로그인 해주세요.")
+                        window.location.replace("/user/login")
+                    } else {
+                        alert('메시지 변경에 성공하였습니다.');
+                        window.location.reload();
+                    }
+                }
+            });
+        }
+        function deleteCheck(id){
+            if(confirm("정말 삭제하시겠습니까 ?") == true){
+                deletereply(id);
+            }
+            else{
+                return ;
+            }
+        }
+
+
+
+
+
+        function deletereply(id) {
+            $.ajax({
+                type: "DELETE",
+                url: `/api/replys/${id}`,
+                success: function (response) {
+                    if(response == false) {
+                        alert("로그인 해주세요.")
+                        window.location.replace("/user/login")
+                    } else {
+                        alert('메시지 삭제에 성공하였습니다.');
+                        window.location.reload();
+                    }
+                }
+            })
+        }
+
+
+
+
+
+        function isValidcomment(comment) {
+            if (comment == "") {
+                alert('댓글을 입력해주세요');
+                return false;
+            }
+            if (comment.trim().length > 1000) {
+                alert('공백 포함 1000자 이하로 입력해주세요');
+                return false;
+            }
+
+            return true;
+        }
+
+        function getReply() {
+            $('#post-box').empty();
+            let logId = location.href.split("id=")[1];
+            $.ajax({
+                type: 'GET',
+                url: `/api/replys/${logId}`,
+                success: function (response) {
+                    for (let i = 0; i < response.length; i++) {
+                        let reply = response[i];
+                        let id = reply.id
+                        let username = reply.username;
+                        let comment = reply.comment;
+                        let modifiedAt = reply.modifiedAt;
+                        addReplys(id, username, comment, modifiedAt);
+                    }
+                }
+            })
+        }
+
+        function addReplys(id, username, comment, modifiedAt) {
+            let tempHtml = `<div class="box">
+            <article class="media">
+                <div class="media-left">
+                    <a class="image is-64x64" href="#">
+                        <img class="is-rounded"
+                             src= "chars/4.ico" alt="Image">
+                    </a>
+                </div>
+                <div class="media-content">
+                    <div class="content">
+                        <p>
+                            <strong id="${id}-username">${username}</strong> <small></small> <small id="${id}-modifiedAt">${modifiedAt}</small>
+                            <br>
+                            <div id="${id}-comment">
+                            ${comment}
+                            </div>
+                            <div id="${id}-editareas" class="edit">
+                        <textarea id="${id}-textareas" class="te-edit" name="" id="" cols="30" rows="5"></textarea>
+                    </div>
+                        </p>
+                    </div>
+                    <div>
+                    <a sec:authorize ="isAuthenticated()" class="uk-icon-link" uk-icon="icon: file-edit; ratio: 2" onclick="editPosts('${id}')" id="${id}-edits"></a>
+            <span class="uk-icon-button" uk-icon="icon: check; ratio: 2" onclick="submitEdits('${id}')" id="${id}-submits"></span>
+            <a sec:authorize ="isAuthenticated()" class="uk-icon-link" uk-icon="icon: trash; ratio: 2" onclick="deleteCheck('${id}')" id="${id}-deletes"></a>
+
+                        </div>
+                    <nav class="level is-mobile">
+                        <div class="level-left">
+                        </div>
+
+                    </nav>
+                </div>
+            </article>
+        </div>`
+
+            $('#post-box').append(tempHtml);
+
+        }
+
+        function replyPost() {
+
+            let comment = $('#textarea-post').val().trim();
+            let logId = location.href.split("id=")[1];
+
+            if (isValidcomment(comment) == false) {
+                return;
+            }
+            let data = {'comment': comment, 'logId': logId};
+
+            $.ajax({
+                type: "POST",
+                url: "/api/replys",
+                contentType: "application/json", // JSON 형식으로 전달함을 알리기
+                data: JSON.stringify(data),
+                success: function (response) {
+                    alert("댓글을 성공적으로 작성하였습니다.");
+                    $("#modal-post").removeClass("is-active")
+                    window.location.reload()
                 }
             });
         }
 
 
-
     </script>
-
-
 
 
 </head>
@@ -185,6 +388,8 @@
 
 <article class="uk-article" id="article-box">
 </article>
+
+<!--모달 포스팅 띄우는곳-->
 <section class="section">
     <article class="media">
         <figure class="media-left" style="align-self: center">
@@ -196,11 +401,12 @@
             <div class="field">
                 <p class="control">
                     <input id="input-post" class="input is-rounded" placeholder="무슨 생각을 하고 계신가요?"
-                           onclick='$("#modal-post").addClass("is-active")'>                </p>
+                           onclick='userCheck(),$("#modal-post").addClass("is-active")'></p>
             </div>
         </div>
     </article>
 </section>
+<!--댓글 하나하나-->
 <section class="section">
     <div id="post-box" class="container">
         <div class="box">
@@ -208,7 +414,7 @@
                 <div class="media-left">
                     <a class="image is-64x64" href="#">
                         <img class="is-rounded"
-                             src= "chars/4.ico" alt="Image">
+                             src="chars/4.ico" alt="Image">
                     </a>
                 </div>
                 <div class="media-content">
@@ -230,6 +436,7 @@
 
     </div>
 </section>
+<!--모달-->
 <div class="modal" id="modal-post">
     <div class="modal-background" onclick='$("#modal-post").removeClass("is-active")'></div>
     <div class="modal-content">
@@ -248,7 +455,7 @@
                         </div>
                         <div class="level-right">
                             <div class="level-item">
-                                <a class="button is-sparta" onclick="post()">포스팅하기</a>
+                                <a class="button is-sparta" onclick="replyPost();">포스팅하기</a>
                             </div>
                             <div class="level-item">
                                 <a class="button is-sparta is-outlined"

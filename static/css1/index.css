@@ -100,7 +100,7 @@ h3 {
 }
 #username {
     position: absolute;
-    left: 1700px;
+    left: 1600px;
     top: 18px;
     font-size: 18px;
     font-size: 18px;
@@ -111,6 +111,7 @@ h3 {
     letter-spacing: 0.36px;
     text-align: center;
     color: #065e3f;
+
 }
 #login-text{
     position: absolute;

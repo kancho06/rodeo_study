@@ -31,6 +31,8 @@ public class SignupRequestDto {
 //    @Pattern(regexp = "^[a-zA-Z0-9]*$" , message = "특수문자, 아이디 문자열 제외")
     private String passwordCheck;
 
+    private String email;
+
     private boolean admin = false;
 
     private String adminToken = "";
