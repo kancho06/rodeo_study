@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta property="og:title" content="익명게시판">
+    <meta property="og:description" content="당신의 비밀을 알려주세요">
+    <meta property="og:image" content="images/our.png">
+    <title>익명 비밀게시판</title>
+    <!--    벌마 css링크-->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.1/css/bulma.min.css">
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<!--    UIkit css링크-->
+    <link rel="stylesheet" href="uikit/uikit.min.css" />
+    <script src="uikitjs/uikit.min.js"></script>
+    <script src="uikitjs/uikit-icons.min.js"></script>
+
+    <!--    css,js링크-->
+    <link th:href="@{/css1/index.css}" rel="stylesheet" />
+
+
+<script>
+
+
+    $(document).ready(function () {
+        // HTML 문서를 로드할 때마다 실행합니다.
+        getLog();
+        // var message = [[ ${message} ]];
+        // if (message === "error") {
+        //     alert("로그인을 해주세요")
+        //
+        // }
+
+    })
+
+
+
+
+
+    // 메모를 불러와서 보여줍니다.
+    function getLog() {
+        // 1. 기존 메모 내용을 지웁니다.
+        $('#post-box').empty();
+        // 2. 메모 목록을 불러와서 HTML로 붙입니다.
+        $.ajax({
+            type: 'GET',
+            url: '/api/logs',
+            success: function (response) {
+                for (i = 0; i < response.length; i++) {
+                    let log = response[i]
+                    let id = log.id;
+                    let title = log.title;
+                    let username = log.username;
+                    let modifiedAt = log.modifiedAt;
+                    let category = log.category;
+                    // let image = log.image;
+                    addHTML(id, title, username, modifiedAt, category)
+                }
+                console.log(response);
+            }
+        })
+
+
+    }
+
+
+    // 메모 하나를 HTML로 만들어서 body 태그 내 원하는 곳에 붙입니다.
+    function addHTML(id, title, username, modifiedAt, category) {
+        // 1. HTML 태그를 만듭니다.
+        let tempHtml = `
+<tr>
+<td><input class="uk-checkbox" type="checkbox"></td>
+                <td><img class="uk-preserve-width uk-border-circle" src="chars/8.ico" width="40" alt=""></td>
+                <td class="uk-table-link">
+                    <a class="uk-link-reset" href="detail.html?id=${id}" id="${id}-title">${title}</a>
+                </td>
+                <td class="uk-text-truncate"id="${id}-category">${category}</td>
+                <td class="uk-text-nowrap"id="${id}-username">${username}</td>
+                <td class="uk-text-nowrap"id="${id}-modifiedAt">${modifiedAt}</td>
+            </tr>
+`;
+        // 2. #cards-box 에 HTML을 붙인다.
+
+        $('#post-box').append(tempHtml);
+    }
+
+
+
+
+
+
+
+</script>
+
+
+
+
+</head>
+
+<body>
+
+<div class="wrap">
+    <nav class="navbar is-fixed-top is-black" role="navigation" aria-label="main navigation">
+        <div class="navbar-brand">
+            <a class="navbar-item" href="/">
+                <strong class="is-sparta"
+                        style="font-family: 'Stylish', sans-serif;font-size: larger;">OUR OWN SECRET</strong>
+            </a>
+            <a sec:authorize ="isAuthenticated()" id="logout-text" href="/user/logout">
+                로그아웃
+            </a>
+            <a sec:authorize="!isAuthenticated()" id="login-text" href="/user/login">
+                로그인
+            </a>
+            <a sec:authorize="!isAuthenticated()" id="signup-text" href="/user/signup">
+                회원가입
+            </a>
+            <div sec:authorize="isAuthenticated()" id="username">
+                <span th:text="${username}"></span>님
+            </div>
+<!--            <form id="my_form" method="post" action="/user/logout">-->
+<!--            <a id="logout-text" href="javascript:{}" onclick="document.getElementById('my_form').submit();">로그아웃</a>-->
+<!--            </form>-->
+        </div>
+    </nav>
+    <div id="header" class="header">
+        <div id="header-inner" class="header-inner">
+            <div class="text">
+                <h1>OUR OWN SECRET</h1>
+                <h3>익명으로 비밀 나누기</h3>>
+            </div>
+            <img src="images/OUR OWN SECRET 배경만.png" alt="" id="head_img"/>
+        </div>
+    </div>
+</div>
+
+<section class="section">
+    <article class="media">
+
+        <div class="media-content">
+            <div class="field">
+                <p class="control">
+                    <a id="input-post" class="input is-rounded" placeholder="당신의 비밀은 무엇인가요?"
+                       href="/goPost"></a></p>
+            </div>
+        </div>
+    </article>
+</section>
+
+<div class="uk-overflow-auto" id="board">
+    <table class="uk-table uk-table-hover uk-table-middle uk-table-divider">
+        <thead>
+        <tr>
+            <th class="uk-table-shrink"></th>
+            <th class="uk-table-shrink">char</th>
+            <th class="uk-table-expand">제목</th>
+            <th class="uk-width-small">카테고리</th>
+            <th class="uk-table-shrink uk-text-nowrap">작성자</th>
+            <th class="uk-width-small">작성일자</th>
+        </tr>
+        </thead>
+        <tbody id="post-box">
+
+        </tbody>
+    </table>
+
+</div>
+
+</body>
+
+</html>

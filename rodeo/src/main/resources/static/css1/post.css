@@ -1,0 +1,127 @@
+
+body {
+    margin: 0px;
+}
+
+.wrap {
+
+    margin: 10px auto;
+
+}
+.header-inner{
+    position:relative;
+
+
+}
+#head_img {
+    width:100vw;
+    height:400px;
+}
+
+/*img {*/
+/*    width:100vw;*/
+/*    height: 400px;*/
+/*}*/
+
+h1 {
+    color: lightgray;
+    font-size: xxx-large;
+    position:absolute;
+    top:275px;
+    left:80px;
+    letter-spacing:13px;
+}
+
+h3 {
+    color: lightslategray;
+    position:absolute;
+    font-size: medium;
+    top:220px;
+    left:400px;
+    letter-spacing:8px;
+}
+
+.is-sparta {
+    color: #065e3f !important;
+}
+
+
+.section {
+    padding: 1rem 1.5rem;
+    max-width: 750px;
+    margin: auto;
+}
+.posting{
+    width:30vw;
+    margin: auto;
+    padding-top: 7px ;
+    padding-bottom: 7px;
+
+}
+
+.area-write{
+    width:35vw;
+    margin: auto;
+    background-color: #f8f8f8;
+    border:3px solid #254740;
+    border-radius: 10px;
+}
+
+#logout-text {
+    position: absolute;
+    left: 1750px;
+    top: 18px;
+    font-size: 18px;
+    font-size: 18px;
+    font-weight: 550;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: 1;
+    letter-spacing: 0.36px;
+    text-align: center;
+    color: #065e3f;
+}
+#username {
+    position: absolute;
+    left: 1600px;
+    top: 18px;
+    font-size: 18px;
+    font-size: 18px;
+    font-weight: 550;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: 1;
+    letter-spacing: 0.36px;
+    text-align: center;
+    color: #065e3f;
+}
+#login-text{
+    position: absolute;
+    left: 800px;
+    top: 18px;
+    font-size: 18px;
+    font-size: 18px;
+    font-weight: 550;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: 1;
+    letter-spacing: 0.36px;
+    text-align: center;
+    color: #065e3f;
+}
+#signup-text {
+    position: absolute;
+    left: 1000px;
+    top: 18px;
+    font-size: 18px;
+    font-size: 18px;
+    font-weight: 550;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: 1;
+    letter-spacing: 0.36px;
+    text-align: center;
+    color: #065e3f;
+}
+
+
